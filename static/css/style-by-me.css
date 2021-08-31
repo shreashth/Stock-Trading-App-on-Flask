@@ -1,0 +1,94 @@
+.flex-order-button{
+  display: flex;
+}
+
+.activeposition {
+  margin-left: 700px;
+  margin-right: 180px;
+  margin-top: 10px;
+
+}
+
+
+
+.trash {
+  margin-top: 55px;
+  margin-left: 20px;
+  color:#137ae8;
+  cursor :pointer;
+}
+
+.label{
+  margin-bottom: 5px;
+}
+
+
+.box-container {
+  padding:-10px;
+  margin-top: -10px;
+}
+
+.scrollbar {
+  border: 0.5px solid black;
+  height:250px;
+  background: #e9ecef;
+  color: black;
+  
+
+}
+.activeposition:hover , .activeposition:focus {
+  text-decoration: none;
+}
+.positioncol{
+  display:flex;
+  margin-left: 100px;
+}
+
+.position{
+  display:flex;
+}
+
+.MTM{
+  margin-left: 200px;
+}
+
+.breadcrumbcontent{
+  justify-content:space-between;
+}
+
+#symboldata{
+  position: absolute;
+  width: 100%;
+  max-width: 870px;
+  cursor: pointer;
+  overflow-y: auto;
+  max-height: 400px;
+  box-sizing: border-box;
+  z-index: 1001;
+}
+
+.link-class:hover{
+ background-color: #f1f1f1;
+}
+
+#expirydata{
+  position: absolute;
+  width: 100%;
+  max-width: 870px;
+  cursor: pointer;
+  overflow-y: auto;
+  max-height: 400px;
+  box-sizing: border-box;
+  z-index: 1001;
+}
+
+#strikepricedata{
+  position: absolute;
+  width: 100%;
+  max-width: 870px;
+  cursor: pointer;
+  overflow-y: auto;
+  max-height: 400px;
+  box-sizing: border-box;
+  z-index: 1001;
+}

@@ -1,0 +1,123 @@
+
+
+$(document).ready(function() {
+  "use strict";
+
+
+function xyz(list,order_maxprofit,order_name) {
+
+let z='',k=0;
+
+for(let element of list){
+
+z+=   
+     `  
+       <td>${element["exchange"]}        </td>
+       <td>${element["symbol"]}          </td>
+       <td>${element["transaction_type"]}</td>
+       <td>${element["product"]}         </td>
+       <td>${element["order_type"]}      </td>
+       <td>${element["price"]}           </td>
+       <td>${element["quantity"]}        </td>
+       <td id='${order_name}maxprofit' name='${k}'>      ${order_maxprofit}  </td>
+       <td><button class="btn btn-success cancel_order" id="cancel${order_name}" name='${k}'>Cancel</button></td>
+       <tr name= '${order_name}'>
+       <td></td>
+  
+       `
+       k++;
+     }
+
+
+return z;
+}
+
+
+
+let alist,blist,list,order_maxprofit, order_name,m=1;
+let activehtml = document.getElementById('activehtml');
+
+{% for order in databaseorder %}
+
+order_name= '{{ order }}';
+
+console.log(order_name);
+
+alist = '{{order.Order}}'
+
+blist = alist.replace(/&#34;/g,'"');
+
+list = JSON.parse(blist);
+
+order_maxprofit = '{{order.Max_Profit}}';
+
+let  active{{order}}html=  
+
+                      `
+                          
+                        <tr name= '${order_name}'>
+                        <td>{{ order.SNo }}</td>
+                        `
+                                                
+                      + xyz(list,order_maxprofit,order_name) +                          
+                    
+                    `  
+                       </tr>
+                       <hr>
+                                               
+                       `
+
+console.log(active{{order}}html);
+
+activehtml.innerHTML += active{{order}}html;
+
+
+{% endfor %}
+
+
+
+document.getElementsByName('1').forEach(e=>e.style.display = 'none'); 
+document.getElementsByName('2').forEach(e=>e.style.display = 'none'); 
+document.getElementsByName('3').forEach(e=>e.style.display = 'none'); 
+
+
+$('.cancel_order').on('click',(e)=>{
+let  id = e.target.id;
+console.log(id);
+
+  for(m=1; m<20; m++){
+     `Order${m}`;
+  if(id === `cancelOrder${m}`){
+    
+    document.getElementsByName(`Order${m}`).forEach(e=>e.style.display = 'none'); 
+    console.log(`Order${m}`,order_name);
+    
+    
+    
+    
+    $.ajax({
+            data: {
+              completeorder : `${m}`,
+              },
+              type : 'POST',
+              url : '/closedposition'
+          });
+          
+          
+          
+    $.ajax({
+            data : {
+              deleteorder :  `${m}` ,
+            },
+            type : 'POST',
+            url : '/deleteorder'
+          });
+  }
+}
+})
+
+
+
+
+  
+})

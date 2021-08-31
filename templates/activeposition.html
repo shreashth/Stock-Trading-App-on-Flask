@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+{% block title %}Active Position{% endblock %}
+
+{% block body %}
+
+
+
+
+<main>
+  <div class="container-fluid">
+    <div class="position">
+    <h3 class="mt-4" style="width:250px">Active Positions</h3>
+    
+    <div class="profitvalue col-md-1 ml-5  my-3">
+    <input class="form-control" style="background:white" id="profitvalue" type="text">
+    </div>
+    
+    <b><div  id = "profitmtmhtml"  style="width:270px" class=" ml-5 my-4">Max Profit  : </div></b>
+    
+  <div class="MTM col-md-2  my-3">
+     <center><input class="form-control" style="background:white " id="mtm" type="text" name="MTM" placeholder="Mark To Market" readonly></center>
+  </div>
+  
+  
+  <div class="col-md-2 my-3 ml-5">
+
+    <button type="button" id="exitallorder"  class="btn btn-dark mr-3 ">Exit All Order</button>
+  </div>
+  
+  
+  </div>
+  
+
+    <ol class="breadcrumb mb-4 ">
+      <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+      <li class="breadcrumb-item active">Active Position</li>
+      <li style="margin-left:800px" id="positionretrievemessage">Please wait retrieving data.......</li>
+    </ol>
+
+
+<div id="bookprofitmessage"></div>
+
+<b><div  id='netpositionsummary'></div></b>
+
+<br/>
+    <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Exchange</th>
+              <th scope="col">Symbol</th>
+              <th scope="col">Buy/Sell</th>
+              <th scope="col">Product</th>
+              <th scope="col">Buy Price</th>
+              <th scope="col">Sell Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Expiry Date</th>
+              <th scope="col">LTP</th>
+              <th scope="col">P&L</th>
+              <th scope="col">Cancel Button</th>              
+            </tr>
+          </thead>
+          <tbody  id="activehtml">
+            
+            
+            
+            
+            
+            
+            
+            
+          </tbody>      
+        </table>
+       </div>
+    
+
+
+</main>
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+  
+  {% for profit in databaseprofit %}
+  
+  console.log(typeof({{profit.Take_Profit}}))
+   localStorage.removeItem('Take_Profit');
+   localStorage.setItem('Take_Profit',{{profit.Take_Profit}});
+  {% endfor %}
+  
+
+
+  
+  
+  
+</script>
+
+
+
+
+
+
+
+
+
+<!-- 
+<script type="text/javascript">
+  
+
+
+
+function xyz(list,order_maxprofit,order_name) {
+  
+  let z='',k=0;
+
+  for(let element of list){
+
+  z+=   
+       `  
+         <td>${element["exchange"]}        </td>
+         <td>${element["symbol"]}          </td>
+         <td>${element["transaction_type"]}</td>
+         <td>${element["product"]}         </td>
+         <td>${element["order_type"]}      </td>
+         <td>${element["price"]}           </td>
+         <td>${element["quantity"]}        </td>
+         <td id='${order_name}maxprofit' name='${k}'>      ${order_maxprofit}  </td>
+         <td><button class="btn btn-success cancel_order" id="cancel${order_name}" name='${k}'>Cancel</button></td>
+         <tr name= '${order_name}'>
+         <td></td>
+    
+         `
+         k++;
+       }
+
+  
+  return z;
+}
+
+
+
+  let alist,blist,list,order_maxprofit, order_name,m=1;
+  let activehtml = document.getElementById('activehtml');
+  
+  {% for order in databaseorder %}
+  
+  order_name= '{{ order }}';
+  
+  
+  
+  alist = '{{order.Order}}'
+  
+  blist = alist.replace(/&#34;/g,'"');
+  
+  list = JSON.parse(blist);
+  
+  order_maxprofit = '{{order.Max_Profit}}';
+  
+let  active{{order}}html=  
+
+                        `
+                            
+                          <tr name= '${order_name}'>
+                          <td>{{ order.SNo }}</td>
+                          `
+                                                  
+                        + xyz(list,order_maxprofit,order_name) +                          
+                      
+                      `  
+                         </tr>
+                         <hr>
+                                                 
+                         `
+
+
+activehtml.innerHTML += active{{order}}html;
+
+
+{% endfor %}
+
+
+document.getElementsByName('1').forEach(e=>e.style.opacity = '0'); 
+document.getElementsByName('2').forEach(e=>e.style.opacity = '0'); 
+document.getElementsByName('3').forEach(e=>e.style.opacity = '0'); 
+
+document.getElementsByName('1').forEach(e=>e.setAttribute('disabled','disabled')); 
+document.getElementsByName('2').forEach(e=>e.setAttribute('disabled','disabled')); 
+document.getElementsByName('3').forEach(e=>e.setAttribute('disabled','disabled')); 
+// document.getElementsByName('1').forEach(e=>e.style.display = 'none'); 
+// document.getElementsByName('2').forEach(e=>e.style.display = 'none'); 
+// document.getElementsByName('3').forEach(e=>e.style.display = 'none'); 
+
+
+$('.cancel_order').on('click',(e)=>{
+let  id = e.target.id;
+console.log(id);
+  
+    for(m=1; m<20; m++){
+       `Order${m}`;
+    if(id === `cancelOrder${m}`){
+      
+      document.getElementsByName(`Order${m}`).forEach(e=>e.style.display = 'none'); 
+      console.log(`Order${m}`,order_name);
+      
+      
+      
+      
+      $.ajax({
+              data: {
+                completeorder : `${m}`,
+                },
+                type : 'POST',
+                url : '/closedposition'
+            });
+            
+            
+            
+      $.ajax({
+              data : {
+                deleteorder :  `${m}` ,
+              },
+              type : 'POST',
+              url : '/deleteorder'
+            });
+    }
+  }
+})
+
+
+
+
+    
+
+</script> -->
+
+
+
+
+{% endblock %}
+
+{% block script %}
+<script src="static/js/activeposition.js"></script>
+{% endblock %}

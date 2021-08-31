@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+
+
+
+
+<main>
+
+  <div class="container-fluid">
+    <div class="form-col ">
+    <div style="display:flex"> 
+       <h1 class="mt-4">Dashboard</h1>
+       
+        <div width="300"  style="margin-left:750px ">
+          
+          <h5 class="mt-2">NIFTY</h5>
+          <h6 class="mt-2" style="margin-left:-30px "  id="niftyquote"></h6>
+        
+        </div>
+        <div width="120" style="margin-left:150px ">
+          
+          <h5 class="mt-2" >BANKNIFTY</h5>
+          <h6 class="mt-2" style="margin-left:-25px " id="bankniftyquote"></h6>
+        
+        </div>
+    </div>
+      <ol class="breadcrumb mb-4 breadcrumbcontent">
+        <li class="breadcrumb-item active">Dashboard</li>
+        <li id="sessionTokenhtml"></li>
+      </ol>
+    </div>
+
+  <div id="message"></div>
+  
+  
+<form id="baseorderblock">
+      <div class="form-row align-items-center">
+        <div class="col-md-1 my-1 ">
+          <select class="form-control  mr-sm-5 " data-live-search="true" id="exchange">
+            <option>NFO</option>
+            <option>NSE</option>
+            
+          </select>
+        </div>
+        
+        
+        <div class="col-md-1 my-1">
+          <select class="form-control  mr-sm-5" data-live-search="true" id="index">
+            <option selected>OPTIDX</option>
+            <option>OPTSTK</option>
+            <option>FUTIDX</option>
+            <option>FUTSTK</option>
+          </select>
+        </div>
+        
+        
+        <div class="col-md-3 my-1">
+          <input  class="form-control  mr-sm-5" data-live-search="true" placeholder="Symbol" id="symbol" >
+          <div id="symbolhtml">
+          <ul class="list-group" id="symboldata"></ul>
+          </div>
+
+          <!-- <div id="symboldata" class="col-md-3" onclick=optiondetails(this)>
+          
+          
+          </div> -->
+        </div>
+        
+        
+        <div class="col-md-2 my-1">
+          <input list="expirydata" class="form-control  mr-sm-5" data-live-search="true" id="expiry" placeholder="Expiry"> 
+               
+          <div id="expityhtml">
+          <ul class="list-group" id="expirydata"></ul>
+          </div>
+          
+        </div>
+        
+        
+        <div class="col-md-1 my-1">
+          <select class="form-control  mr-sm-5" data-live-search="true" id="optiontype">
+            <option>PE</option>
+            <option >CE</option>
+          </select>
+        </div>
+        
+        
+        <div class="col-md-2 my-1">
+          <input list="strikepricedata" class="form-control  mr-sm-5" data-live-search="true" id="strikeprice" placeholder="Strike Price">
+          
+          <div id="strikepricehtml">
+          <ul class="list-group" id="strikepricedata"></ul>
+          </div>
+
+        </div>
+        <div class="MarketPrice col-md-1 ">
+          <input class="form-control" style="background:white" id="mktprice" type="text" name="MarketPrice" placeholder="MKT Price" readonly >
+        </div>
+        <div>
+          <button type="reset" class="btn btn-primary my-sm-1  " id="add" onclick=addproduct()>+</button>
+          <button type="reset" class="btn btn-danger my-sm-1  " >-</button>
+        </div>
+      </div>
+</form>
+    <br />
+
+    <br />
+
+
+
+
+
+
+    <div class="label form-row align-items-center ">
+      <div class="Exchange col-md-1 ">
+        <label class=" mr-sm-2 my-1 ">Exchange</label>
+      </div>
+      <div class="Symbol col-md-3 mr-1 ">
+        <label class="  mr-sm-2 my-1 ">Symbol</label>
+      </div>
+      <div class="Buy/Sell col-md-1 mr-1">
+        <label class="  mr-sm-2 my-1 ">Buy/Sell</label>
+      </div>
+      <div class="Product col-md-2 mr-1">
+        <label class="  mr-sm-2 my-1 ">Product</label>
+      </div>
+      <div class="OrderType col-md-2  mr-1">
+        <label class="  mr-sm-2 my-1 ">Order Type</label>
+      </div>
+      <div class="Price col-md-1 mr-1">
+        <label class="  mr-sm-2 my-2 ">Price</label>
+      </div>
+      <div class="Quantity col-md-1 mr-1">
+        <label class="  mr-sm-2 my-2 ">Quantity</label>
+      </div>
+      <!-- <label class="  mr-sm-2 my-1 " for="inlineFormCustomSelect">Remove</label> -->
+    </div>
+
+
+  <form  id= 'orderForm'  novalidate>
+
+
+    {% for i in range (3) %}
+
+    <div id="orderblock{{i+1}}" >
+
+      <div class="box-container form-row align-items-center">
+
+
+        <div class="Exchange col-md-1 ">
+          <input class="form-control" style="background:white" id="exchange{{i+1}}" type="text" name="Exchange" placeholder="Exchange" readonly >
+        </div>
+
+        <div class="Symbol col-md-3 mr-1">
+          <input class="form-control" style="background:white" id="symbol{{i+1}}" type="text" name="Symbol" placeholder="Symbol" readonly  >
+        </div>
+
+        <!-- <div id="index{{i+1}}" >
+
+        </div> -->
+
+
+
+        <div class="Buy/Sell col-md-1 mr-1">
+          <select class="form-control mr-sm-2 my-1" name="BuySell" id="buysell{{i+1}}" >
+            <option selected>Choose...</option>
+            <option tokens="1">BUY</option>
+            <option tokens="2">SELL</option>
+          </select>
+        </div>
+
+
+
+        <div class="Product col-md-2 mr-1">
+          <select class="form-control mr-sm-2 my-1" name="Product" id="product{{i+1}}" >
+            <option selected>Choose...</option>
+            <option value="MIS">Intraday</option>
+            <br>
+            <option value="CNC">Delivery</option>
+            <br>
+            <option value="NRML">Normal</option>
+          </select>
+        </div>
+
+
+
+        <div class="OrderType col-md-2 mr-1">
+          <select class="form-control mr-sm-2 my-1" name="Order_Type" id="ordertype{{i+1}}" >
+            <option selected>Choose...</option>
+            <option value="MKT">Market</option>
+            <option value="L">Limit</option>
+            <option value="SL">SL-Limit</option>
+            <option value="SL-M">SL-Market</option>
+          </select>
+        </div>
+
+
+        <div class="Price col-md-1 mr-1">
+          <input class="form-control mr-sm-2 my-2" name="Price" id="price{{i+1}}" >
+        </div>
+
+
+        <div class="Quantity col-md-1 ">
+          <input class="form-control mr-sm-2 my-2" name="Quantity" id="quantity{{i+1}}" >
+        </div>
+
+
+        <div class="trash  my-3">
+          <a id="trash{{i+1}}" onclick=clearorderblock(this)>
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+
+
+    {% endfor %}
+
+
+
+
+
+    <br>
+
+
+
+
+    <div class="form-row align-items-center">
+      
+      
+      <div class="col-md-2 my-1 mr-5">
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Max Profit</label>
+        <input class="form-control mr-sm-2 my-2" id="maxprofit" name="Max_Profit">
+      </div>
+
+
+
+      <div class="col-md-2 my-1 mr-5">
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Profit Percentage</label>
+        <input class="form-control mr-sm-2 my-2" id="profitpercentage" name="Profit_Percentage">
+      </div>
+      
+
+      <div class="col-md-2 my-1 mr-3">
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Max Loss</label>
+        <input class="form-control mr-sm-2 my-2" id="maxloss" name="Max_Loss">
+      </div>
+    </div>
+
+
+    <div class="flex-order-button">
+      <div class="col-md-2 my-4 mr-3">
+        <label class="mr-sm-2" for="inlineFormCustomSelect"><br></label>
+        <button  type="submit" class="btn btn-primary mr-3 " id="submitbutton">Place Order</button>
+      </div>
+
+  </form>
+      
+      
+      
+
+      <div class="col-md-3 my-4 mr-3">
+        <label class="mr-sm-3" for="inlineFormCustomSelect"><br></label>
+        <button type="button" class="btn btn-success mr-6 ">Exit Current Order</button>
+      </div>
+
+      <div class="col-md-2 my-4 mr-3">
+        <label class="mr-sm-2" for="inlineFormCustomSelect"><br></label>
+        <button type="button" class="btn btn-dark mr-3 ">Exit All Order</button>
+      </div>
+    </div>
+
+
+
+    <!-- ----------------------------------Scrollspy----------------------------     -->
+    <br />
+    
+    <h3>Order Current Status</h3>
+    <div class="scrollbar" data-simplebar data-simplebar-auto-hide="false">
+
+    </div>
+
+
+
+</main>
+
+
+
+{% endblock %}
